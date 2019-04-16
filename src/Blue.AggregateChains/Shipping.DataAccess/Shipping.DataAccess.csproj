@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net461</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EntityFramework" Version="6.*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Shipping.Orders\Shipping.Orders.csproj" />
+    <ProjectReference Include="..\Shipping.Stores\Shipping.Stores.csproj" />
+  </ItemGroup>
+
+</Project>

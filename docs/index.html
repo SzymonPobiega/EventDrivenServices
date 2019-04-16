@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Messages on the Outside, Messages on the Inside</title>
+		<meta name="description" content="Messages on the Outside, Messages on the Inside">
+		<meta name="author" content="Szymon Pobiega">
+
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/night.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+
+		<style media="screen" type="text/css">
+			.reveal section img { background:none; border:none; box-shadow:none; }
+
+			.reveal table {
+			  margin: auto;
+			  border-collapse: collapse;
+			  border-spacing: 0;
+			}
+
+			.reveal table th {
+			  font-weight: bold;
+			}
+
+			.reveal table th,
+			.reveal table td {
+			  text-align: left;
+			  padding: 0.2em 0.5em 0.2em 0.5em;
+			  border-bottom: 1px solid;
+			}
+
+			.highlight-inline {
+            	background:yellow;
+            	color:black;
+			}
+			
+			.highlight-inline span {
+				background:inherit;
+				color:inherit;
+			}
+			
+			img.zoom-left-centre {
+				transform: scale(2.1) translate(25%, 0);
+			}
+
+			img.zoom-left-top {
+				transform: scale(2.1) translate(25%, 25%);
+			}
+
+			img.zoom-left-bottom {
+				transform: scale(2.2) translate(25%, -25%);
+			}
+
+			img.zoom-right-centre {
+				transform: scale(1.8) translate(-25%, 0);
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<h2>Messages on the Outside, Messages on the Inside</h2>
+					<p>SzymonPobiega</p>
+					<p><a href="https://twitter.com/SzymonPobiega">Twitter</a></p>
+					<p><a href="https://www.linkedin.com/in/szymonpobiega/">LinkedIn</a></p>
+				</section>
+				<section>
+					<h2 class="fragment">NServiceBus</h2>
+					<h2 class="fragment">DDD</h2>
+					<h2 class="fragment">Message delivery &amp; processing</h2>
+				</section>
+				<section>
+					<h2>Pierogi time!</h2>
+					<figure>
+						<img src="images/pierogi.jpg" alt="" class="stretch"/>
+						<figcaption>
+							<small>Autor: Stako (File:Ruskie.jpg) [<a href="http://www.gnu.org/copyleft/fdl.html">GFDL</a> lub <a href="http://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA-3.0</a>], <a href="https://commons.wikimedia.org/wiki/File:Pierogi_z_cebulk%C4%85.jpg">Wikimedia Commons</a></small>
+						</figcaption>
+					</figure>
+				</section>
+				<section>
+					<img src="images/architecture.png" class="stretch"/>
+				</section>
+				<section>
+					<img src="images/doors.jpg" class="stretch"/>
+					<figcaption>
+						<small>Source: <a href="https://www.flickr.com/people/97006177@N00">Michal Osmenda</a></small>
+					</figcaption>
+				</section>
+				<section>
+					<h1>Sprint Zero</h1>
+				</section>
+				<section data-background="#0b264c">
+					<img src="images/aggregate.png" class="stretch"/>
+				</section>
+				<section data-background="#0b264c">
+					<img src="images/aggregate-chain.png" class="stretch"/>
+				</section>
+				<section data-background="#0b264c">
+					<img src="images/table-queue.png" class="stretch"/>
+				</section>
+				<section data-background="#0b264c">
+					<h2>Chaining aggregates</h2>
+					<h3>
+					<pre class="stretch"><code class="sql" data-noescape data-trim>
+begin tran
+	with task as (select top (1) * from Tasks) 
+		delete from task output...
+	select * from AggregateA where Id = @id
+	select * from EntityA where ParentId = @id
+
+	update AggregateA set SomeProperty = @someValue
+	update EntityA set OtherProperty = @otherValue
+	insert into Tasks (Payload) values (@payload)
+commit tran
+					</code></pre>
+					</h3>
+				</section>
+				<section data-background="#4c0b0b">
+					<img src="images/queues-and-components.png" class="stretch"/>
+				</section>
+				<section data-background="#4c0b0b">
+					<img src="images/at-most-once.png" class="stretch"/>
+				</section>
+				<section  data-background="#4c0b0b">
+					<img src="images/manager.gif" width="30%" style="float: right"/>
+					<div style="width: 60%;">
+						<h2>Why did we not bill them?</h2>					
+					</div>
+				</section>
+				<section data-background="#4c0b0b">
+					<img src="images/at-least-once.png" class="stretch"/>
+				</section>
+				<section data-background="#4c0b0b">
+					<img src="images/manager.gif" width="30%" style="float: right"/>
+					<div style="width: 60%;">
+						<h2>Why did we bill them twice?</h2>					
+					</div>
+				</section>
+				<section data-background="#4c0b0b">
+					<h1>\(f(f(x)) = f(x)\)</h1>
+				</section>
+				<section>
+					<h1>Demo</h1>
+				</section>
+				<section data-background="#4c0b0b">
+					<img src="" class="demo" data-img-prefix="images/Demo0-Meat/frame">
+					<div>
+						<span class="fragment imgsrc" data-index="1" data-transform="zoom-left-top"></span>
+						<span class="fragment imgsrc" data-index="1" data-transform="zoom-left-centre"></span>
+						<span class="fragment imgsrc" data-index="2" data-transform="zoom-left-top"></span>
+						<span class="fragment imgsrc" data-index="2" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="3" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="4" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="5" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="6" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="7" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="8" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="9" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="10" data-transform="zoom-left-centre"></span>
+						<span class="fragment imgsrc" data-index="11" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="12" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="13" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="14" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="15" data-transform="zoom-left-centre"></span>
+					</div>
+				</section>
+				<section data-background="#0b264c">
+					<img src="images/distributed-stores.png"/>
+				</section>
+				<section>
+					<h1>Sprint One</h1>
+				</section>
+				<section data-background="#0b264c">
+					<img src="images/multiple-databases.png" class="stretch"/>
+				</section>
+				<section>
+					<h2>Two-phase commit</h1>
+					<h3 class="fragment">Prepare A</h3>
+					<h3 class="fragment">Prepare B</h3>
+					<h3 class="fragment">Commit A</h3>
+					<h3 class="fragment">Commit B</h3>
+				</section>
+				<section data-background="#0b264c">
+					<img src="images/dtc.png" class="stretch"/>
+				</section>
+				<section data-background="#4c0b0b">
+					<img src="" class="demo" data-img-prefix="images/Demo0-Ruskie/frame">
+					<div>
+						<span class="fragment imgsrc" data-index="1" data-transform="zoom-left-top"></span>
+						<span class="fragment imgsrc" data-index="1" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="2" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="3" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="4" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="5" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="6" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="7" data-transform="zoom-left-centre"></span>
+						<span class="fragment imgsrc" data-index="8" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="9" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="10" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="11" data-transform="zoom-left-centre"></span>
+					</div>
+				</section>
+				<section data-background="#4c0b0b">
+					<img src="" class="demo" data-img-prefix="images/Demo1-SwissCheese/frame">
+					<div>
+						<span class="fragment imgsrc" data-index="1" data-transform="zoom-left-top"></span>
+						<span class="fragment imgsrc" data-index="2" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="3" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="4" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="5" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="6" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="7" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="7" data-transform="zoom-left-centre"></span>
+						<span class="fragment imgsrc" data-index="7" data-transform="zoom-left-bottom"></span>
+					</div>
+				</section>
+				<section data-background="#4c0b0b">
+					<img src="images/publish-persist.png" class="stretch"/>
+				</section>
+				<section data-background="#4c0b0b">
+					<h2>Framing the problem</h2>
+					<img src="images/what-do-we-want.png" width="30%" style="float: right"/>
+					<ul style="width: 60%;">
+						<li class="fragment">Don't lose messages</li>
+						<li class="fragment">Outcome the same no matter how many times we process the message (idempotence)</li>
+						<li class="fragment">Don't leak non-durable state (ghost messages)</li>
+					</ul>
+				</section>
+				<section>
+					<h1>Demo</h1>
+				</section>
+				<section data-background="#4c0b0b">
+					<img src="" class="demo" data-img-prefix="images/Demo2-Meat/frame">
+					<div>
+						<span class="fragment imgsrc" data-index="1" data-transform="zoom-left-top"></span>
+						<span class="fragment imgsrc" data-index="2" data-transform="zoom-left-top"></span>
+						<span class="fragment imgsrc" data-index="2" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="3" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="4" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="5" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="6" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="7" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="8" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="9" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="10" data-transform="zoom-left-centre"></span>
+						<span class="fragment imgsrc" data-index="11" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="12" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="13" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="14" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="15" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="15" data-transform="zoom-left-centre"></span>
+						<span class="fragment imgsrc" data-index="16" data-transform="zoom-left-bottom"></span>
+					</div>
+				</section>
+				<section data-background="#0b264c">
+					<img src="images/dtc-latency.png" class="stretch"/>
+				</section>
+				<section>
+					<img src="images/manager.gif" width="30%" style="float: right"/>
+					<div style="width: 60%;">
+						<h2>Frustration</h2>
+							Why can't we have both correctness and performance?
+					</div>
+				</section>
+				<section data-background="#4c0b0b">
+					<h3>meets the performance objectives</h3>
+					<h3 class="fragment">struggles to deliver a correct solution</h3> 
+					<h3 class="fragment">assumes all components live in a hostile environment</h3>
+					<h3 class="fragment">entangles business logic with message delivery logic</h3>
+				</section>
+				<section data-background="#0b264c">
+					<h3>delivers a correct solution</h3>
+					<h3 class="fragment">assumes non-hostile and non-distributed environment</h3>
+					<h3 class="fragment">struggles to deploy to a real world distributed setting</h3> 
+				</section>
+				<section>
+					<img src="images/hammer.png" class="stretch"/>
+				</section>
+				<section>
+					<h2>Thomas Jefferson: all men are created equal</h2>
+					<h2 class="fragment">distributed system: messages are not created equal</h2>
+				</section>
+				<section>
+					<img src="images/island-and-sea.jpg" class="stretch"/>
+				</section>
+				<section>
+					<img src="images/island-structure.png" class="stretch"/>
+				</section>
+				<section>
+					<img src="images/islands-and-bridge.png" class="stretch"/>
+				</section>
+				<section>
+					<img src="images/manager.gif" width="30%" style="float: right"/>
+					<div style="width: 60%;">
+						<h3>Do you know why are these messages processed in the wrong order?</h3>
+					</div>
+				</section>
+				<section>
+					<h1>Thank you!</h1>
+					<p>SzymonPobiega</p>
+					<p><a href="https://twitter.com/SzymonPobiega">Twitter</a></p>
+					<p><a href="https://www.linkedin.com/in/szymonpobiega/">LinkedIn</a></p>
+				</section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="lib/js/jquery-2.1.4.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+		$(function() {
+
+			$('img.demo').each(function(i, img){
+				var $img = $(img);
+				var prefix = $img.data('img-prefix');
+				var frames = $img.data('frames');
+				if (typeof frames !== 'undefined') {
+					var div = $('<div></div>')
+					for (var i = 1; i < frames; i++) {
+						div.append('<span class="fragment imgsrc" data-src="'+prefix+'-'+i+'.jpg"/>')
+					}
+					$img.after(div);
+				}
+				$img.attr('src', prefix+'-'+0+'.jpg')
+			})
+		});
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				margin: 0,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				math: {
+					// mathjax: 'http://cdn.mathjax.org/mathjax/latest/MathJax.js',
+					config: 'TeX-AMS_HTML-full'
+				},
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { 
+						hljs.initHighlightingOnLoad(); 
+						hljs.configure({tabReplace: '   '})
+						} },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/math/math.js', async: true }
+				]
+			});
+
+			function fadeImage($el) {
+				// Get image DOM element
+				$img = $el.parent().prev();
+
+				$img.removeClass();
+				$img.addClass('demo');
+
+				var src = $el.data('src');
+				if (typeof src !== `undefined`) {
+					$img.attr('src', src)
+				}
+
+				var index = $el.data('index');
+				if (typeof index !== `undefined`) {
+					var prefix = $img.data('img-prefix');
+					if (typeof prefix !== `undefined`) {
+						$img.attr('src', prefix+'-'+index+'.jpg')
+					}
+				}
+
+				var transform = $el.data('transform');
+				if (typeof transform !== `undefined`) {
+					$img.addClass(transform);
+				}
+			}
+
+			Reveal.addEventListener( 'slidechanged', function( event ) {
+				var $slide = $(event.currentSlide);
+				var $img = $slide.children('img');
+				var prefix = $img.data('img-prefix');
+				if (typeof prefix !== `undefined`) {
+					$img.attr('src', prefix+'-'+0+'.jpg')
+				}
+			} );
+
+			Reveal.addEventListener('fragmentshown', function(event) {
+				// Get DOM element of current fragment
+				var $el = $(event.fragment);
+
+				// Check if current fragment is of 'type' imgsrc
+				// If yes: fade image with source of current element
+				if($el.hasClass('imgsrc'))
+					fadeImage($el);
+			});
+
+			Reveal.addEventListener('fragmenthidden', function(event) {
+				// Get DOM element of current fragment
+				var $el = $(event.fragment);
+
+				// Check if current fragment is of 'type' imgsrc
+				// If yes: fade image with source of previous element
+				if($el.hasClass('imgsrc')) {
+					fadeImage($el.prev());
+				}
+			});
+
+		</script>
+
+	</body>
+</html>
