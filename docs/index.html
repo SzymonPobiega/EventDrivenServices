@@ -122,6 +122,9 @@
 					<img src="images/aggregate.png" class="stretch"/>
 				</section>
 				<section data-background="#0b264c">
+					<img src="images/cross-aggregate-logic.png" class="stretch"/>
+				</section>
+				<section data-background="#0b264c">
 					<img src="images/aggregate-chain.png" class="stretch"/>
 				</section>
 				<section data-background="#0b264c">
@@ -132,50 +135,21 @@
 					<h3>
 					<pre class="stretch"><code class="sql" data-noescape data-trim>
 begin tran
-	with task as (select top (1) * from Tasks) 
-		delete from task output...
-	select * from AggregateA where Id = @id
+	with msg as (
+		select top (1) * from Messages 
+			with (updlock, readpast) 
+			order by Seq
+	) delete from msg output Payload
+
+	select * from AggregateA where AggregateId = @id
 	select * from EntityA where ParentId = @id
 
 	update AggregateA set SomeProperty = @someValue
 	update EntityA set OtherProperty = @otherValue
-	insert into Tasks (Payload) values (@payload)
+	insert into Messages (Payload) values (@payload)
 commit tran
 					</code></pre>
 					</h3>
-				</section>
-				<section data-background="#0b264c">
-					<img src="" class="demo" data-img-prefix="images/Demo-Aggregates/frame" data-suffix=".png">
-					<div>
-						<span class="fragment imgsrc" data-index="1" data-transform="zoom-left-top"></span>
-						<span class="fragment imgsrc" data-index="1" data-transform="zoom-right-centre"></span>
-						<span class="fragment imgsrc" data-index="2" data-transform="zoom-right-centre"></span>
-						<span class="fragment imgsrc" data-index="3" data-transform="zoom-right-centre"></span>
-						<span class="fragment imgsrc" data-index="4" data-transform="zoom-right-centre"></span>
-						<span class="fragment imgsrc" data-index="4" data-transform="zoom-left-bottom"></span>
-						<span class="fragment imgsrc" data-index="5" data-transform="zoom-left-top"></span>
-						<span class="fragment imgsrc" data-index="5" data-transform="zoom-right-centre"></span>
-						<span class="fragment imgsrc" data-index="6" data-transform="zoom-right-centre"></span>
-						<span class="fragment imgsrc" data-index="7" data-transform="zoom-right-centre"></span>
-						<span class="fragment imgsrc" data-index="8" data-transform="zoom-right-centre"></span>
-						<span class="fragment imgsrc" data-index="8" data-transform="zoom-left-bottom"></span>
-						<span class="fragment imgsrc" data-index="9" data-transform="zoom-left-top"></span>
-						<span class="fragment imgsrc" data-index="9" data-transform="zoom-right-centre"></span>
-						<span class="fragment imgsrc" data-index="10" data-transform="zoom-right-centre"></span>
-						<span class="fragment imgsrc" data-index="11" data-transform="zoom-right-centre"></span>
-						<span class="fragment imgsrc" data-index="12" data-transform="zoom-right-centre"></span>
-						<span class="fragment imgsrc" data-index="13" data-transform="zoom-right-centre"></span>
-						<span class="fragment imgsrc" data-index="14" data-transform="zoom-right-centre"></span>
-						<span class="fragment imgsrc" data-index="16" data-transform="zoom-right-centre"></span>
-						<span class="fragment imgsrc" data-index="17" data-transform="zoom-right-centre"></span>
-						<span class="fragment imgsrc" data-index="18" data-transform="zoom-right-centre"></span>
-						<span class="fragment imgsrc" data-index="18" data-transform="zoom-left-bottom"></span>
-						<span class="fragment imgsrc" data-index="19" data-transform="zoom-left-bottom"></span>
-						<span class="fragment imgsrc" data-index="19" data-transform="zoom-right-centre"></span>
-						<span class="fragment imgsrc" data-index="20" data-transform="zoom-right-centre"></span>
-						<span class="fragment imgsrc" data-index="21" data-transform="zoom-right-centre"></span>
-						<span class="fragment imgsrc" data-index="22" data-transform="zoom-right-centre"></span>
-					</div>
 				</section>
 				<section data-background="#4c0b0b">
 					<img src="images/queues-and-components.png" class="stretch"/>
@@ -224,6 +198,39 @@ commit tran
 						<span class="fragment imgsrc" data-index="13" data-transform="zoom-right-centre"></span>
 						<span class="fragment imgsrc" data-index="14" data-transform="zoom-right-centre"></span>
 						<span class="fragment imgsrc" data-index="15" data-transform="zoom-left-centre"></span>
+					</div>
+				</section>
+				<section data-background="#0b264c">
+					<img src="" class="demo" data-img-prefix="images/Demo-Aggregates/frame" data-suffix=".png">
+					<div>
+						<span class="fragment imgsrc" data-index="1" data-transform="zoom-left-top"></span>
+						<span class="fragment imgsrc" data-index="1" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="2" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="3" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="4" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="4" data-transform="zoom-left-bottom"></span>
+						<span class="fragment imgsrc" data-index="5" data-transform="zoom-left-top"></span>
+						<span class="fragment imgsrc" data-index="5" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="6" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="7" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="8" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="8" data-transform="zoom-left-bottom"></span>
+						<span class="fragment imgsrc" data-index="9" data-transform="zoom-left-top"></span>
+						<span class="fragment imgsrc" data-index="9" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="10" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="11" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="12" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="13" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="14" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="16" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="17" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="18" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="18" data-transform="zoom-left-bottom"></span>
+						<span class="fragment imgsrc" data-index="19" data-transform="zoom-left-bottom"></span>
+						<span class="fragment imgsrc" data-index="19" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="20" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="21" data-transform="zoom-right-centre"></span>
+						<span class="fragment imgsrc" data-index="22" data-transform="zoom-right-centre"></span>
 					</div>
 				</section>
 				<section data-background="#0b264c">
@@ -302,6 +309,9 @@ commit tran
 						<li class="fragment">Don't leak non-durable state (ghost messages)</li>
 					</ul>
 				</section>
+				<section data-background="#4c0b0b">
+					<img src="images/publish-persist-2.png" class="stretch"/>
+				</section>
 				<section>
 					<h1>Demo</h1>
 				</section>
@@ -353,15 +363,16 @@ commit tran
 					</div>
 				</section>
 				<section data-background="#4c0b0b">
-					<h3>meets the performance objectives</h3>
-					<h3 class="fragment">struggles to deliver a correct solution</h3> 
-					<h3 class="fragment">assumes all components live in a hostile environment</h3>
-					<h3 class="fragment">entangles business logic with message delivery logic</h3>
+					<h3>meets the performance objectives 👌</h3>
+					<h3 class="fragment">struggles to deliver a correct solution 🔥</h3> 
+					<h3 class="fragment">entangles business logic with message delivery logic 🔥</h3>
+					<h3 class="fragment">assumes all components live in a hostile environment 🔥</h3>
 				</section>
 				<section data-background="#0b264c">
-					<h3>delivers a correct solution</h3>
-					<h3 class="fragment">assumes non-hostile and non-distributed environment</h3>
-					<h3 class="fragment">struggles to deploy to a real world distributed setting</h3> 
+					<h3>delivers a correct solution 👌</h3>
+					<h3 class="fragment">struggles with performance 🔥</h3>
+					<h3 class="fragment">used protocols do not tolerate failures or latency 🔥</h3>
+					<h3 class="fragment">assumes non-hostile and non-distributed environment 🔥</h3>
 				</section>
 				<section>
 					<img src="images/hammer.png" class="stretch"/>
