@@ -21,9 +21,9 @@ class Program
         Start().GetAwaiter().GetResult();
     }
 
-    static readonly Regex createExpr = new Regex("create ([A-Za-z]+)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-    static readonly Regex submitExpr = new Regex("submit ([A-Za-z]+)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-    static readonly Regex addExpr = new Regex($"add ({string.Join("|", Enum.GetNames(typeof(Filling)))}) to ([A-Za-z]+)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+    static readonly Regex createExpr = new Regex("create ([A-Za-z0-9]+)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+    static readonly Regex submitExpr = new Regex("submit ([A-Za-z0-9]+)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+    static readonly Regex addExpr = new Regex($"add ({string.Join("|", Enum.GetNames(typeof(Filling)))}) to ([A-Za-z0-9]+)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
     static async Task Start()
     {

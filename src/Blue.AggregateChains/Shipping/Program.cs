@@ -52,9 +52,11 @@ class Program
             return connection;
         });
 
-        transport.Routing().RegisterPublisher(typeof(OrderSubmitted), "Blue.Orders");
-        transport.Routing().RegisterPublisher(typeof(OrderCreated), "Blue.Orders");
-        transport.Routing().RegisterPublisher(typeof(LineAdded), "Blue.Orders");
+        var routing = transport.Routing();
+        routing.RegisterPublisher(typeof(OrderSubmitted), "Blue.Orders");
+        routing.RegisterPublisher(typeof(OrderCreated), "Blue.Orders");
+        routing.RegisterPublisher(typeof(LineAdded), "Blue.Orders");
+        routing.RouteToEndpoint(typeof(CreateShipment), "Blue.Shipping");
 
         config.Pipeline.Register(new UnitOfWorkBehavior(), "Unit of work");
         config.RegisterComponents(c =>

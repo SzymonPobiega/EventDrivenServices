@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Messages;
 using NServiceBus;
 using NServiceBus.Logging;
+using Shipping.Orders;
 using Filling = Shipping.Orders.Filling;
 
 public class OrderSubmittedHandler : IHandleMessages<OrderSubmitted>
@@ -12,9 +13,7 @@ public class OrderSubmittedHandler : IHandleMessages<OrderSubmitted>
     public async Task Handle(OrderSubmitted message, IMessageHandlerContext context)
     {
         var order = await dataContext.Orders
-            .SingleAsync(o => o.OrderId == message.OrderId).ConfigureAwait(false);
-
-        var items = order.Lines.Select(x => Convert(x.Filling)).ToList();
+            .SingleAsync(o => o.OrderId == message.OrderId);
 
         var storeId = FindClosestStore(message.DeliveryAddress);
 
@@ -23,6 +22,7 @@ public class OrderSubmittedHandler : IHandleMessages<OrderSubmitted>
 
         store.AssignShipment();
 
+        var items = order.Lines.Select(x => Convert(x.Filling)).ToList();
         var createShipmentMessage = new CreateShipment
         {
             OrderId = order.OrderId,
@@ -31,11 +31,16 @@ public class OrderSubmittedHandler : IHandleMessages<OrderSubmitted>
             Items = items
         };
 
-        await context.SendLocal(createShipmentMessage).ConfigureAwait(false);
+        await context.Send(createShipmentMessage);
 
         log.Info($"Order {message.OrderId} with delivery to {message.DeliveryAddress} submitted.");
 
         await delayGenerator.WaitFor(message.OrderId).ConfigureAwait(false);
+    }
+
+    static string FindStoreQueue(Store store)
+    {
+        return store.StoreId;
     }
 
     static string FindClosestStore(string deliveryAddress)

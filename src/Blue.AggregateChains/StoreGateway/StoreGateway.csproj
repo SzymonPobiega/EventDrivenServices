@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net461</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NServiceBus.RabbitMQ" Version="5.1.1" />
+    <PackageReference Include="NServiceBus.Router" Version="3.3.1" />
+    <PackageReference Include="NServiceBus.Router.SqlServer" Version="3.3.1" />
+    <PackageReference Include="NServiceBus.SqlServer" Version="[4.0.0, 5.0.0)" />
+  </ItemGroup>
+
+</Project>
