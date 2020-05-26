@@ -4,8 +4,8 @@
 	<head>
 		<meta charset="utf-8">
 
-		<title>Messages on the Outside, Messages on the Inside</title>
-		<meta name="description" content="Messages on the Outside, Messages on the Inside">
+		<title>Event-driven services. What can go wrong?</title>
+		<meta name="description" content="Event-driven services. What can go wrong?">
 		<meta name="author" content="Szymon Pobiega">
 
 		<meta name="apple-mobile-web-app-capable" content="yes">
@@ -67,6 +67,15 @@
 				line-height: 1.2;
 			}
 
+			section img {
+				padding-bottom: 50px;
+				padding-top: 50px;
+			}
+			section img.demo {
+				padding-bottom: 0;
+				padding-top: 0;
+			}
+
 			img.zoom-island {
 				transform: translate(0, -15%);
 			}
@@ -119,6 +128,13 @@
 				left: 20px;
 				bottom: 20px;
 			}
+			.twitter-blog {
+				position: fixed;
+				height: 80px;
+				z-index: 30;
+				right: 20px;
+				bottom: 20px;
+			}
 		</style>
 	</head>
 
@@ -127,26 +143,31 @@
 			<aside class="particular-logo">
 				<img src="images/Particular.svg" height="100em"/>
 			</aside>
+			<aside class="twitter-blog">
+				<div>@SzymonPobiega | exactly-once.github.io</div>
+			</aside>
 			<div class="slides">
 				<section>
-					<h2>Messages on the Outside, <br>Messages on the Inside</h2>
+					<h2>Event-driven services</h2>
+					<h3>What can go wrong?</h3>
 					<p><a href="https://exactly-once.github.io/">exactly-once.github.io</a></p>
 					<p><a href="https://twitter.com/SzymonPobiega">twitter.com/SzymonPobiega</a></p>
 					<p><a href="https://www.linkedin.com/in/szymonpobiega/">linkedin.com/in/SzymonPobiega</a></p>
 				</section>
 				<section>
+					<img src="images/work-place.jpg" class="stretch"/>
+				</section>
+				<section>
 					<h2>Domain-Driven Design</h2>
 					<h2>Event Sourcing</h2>
-					<img src="images/Particular.svg" height="100em"/>
+					<img src="images/Particular.svg" style="padding-bottom: 0px; padding-top: 0px" height="100em"/>
 				</section>
 				<section>
 					<h2>Pierogi</h2>
-					<figure>
-						<img src="images/pierogi.jpg" alt="" class="stretch"/>
-						<figcaption>
-							<small>Autor: Stako (File:Ruskie.jpg) [<a href="http://www.gnu.org/copyleft/fdl.html">GFDL</a> lub <a href="http://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA-3.0</a>], <a href="https://commons.wikimedia.org/wiki/File:Pierogi_z_cebulk%C4%85.jpg">Wikimedia Commons</a></small>
-						</figcaption>
-					</figure>
+					<img src="images/pierogi.jpg" alt="" class="stretch" style="padding-bottom: 0px;"/>
+					<figcaption style="padding-bottom: 50px;">
+						<small>Autor: Stako (File:Ruskie.jpg) [<a href="http://www.gnu.org/copyleft/fdl.html">GFDL</a> lub <a href="http://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA-3.0</a>], <a href="https://commons.wikimedia.org/wiki/File:Pierogi_z_cebulk%C4%85.jpg">Wikimedia Commons</a></small>
+					</figcaption>
 				</section>
 				<section>
 					<img src="images/architect.jpg" class="stretch"/>
@@ -155,8 +176,8 @@
 					<img src="images/architecture.png" class="stretch"/>
 				</section>
 				<section>
-					<img src="images/doors.jpg" class="stretch"/>
-					<figcaption>
+					<img src="images/doors.jpg" class="stretch" style="padding-bottom: 0px;"/>
+					<figcaption style="padding-bottom: 50px;">
 						<small>Source: <a href="https://www.flickr.com/people/97006177@N00">Michal Osmenda</a></small>
 					</figcaption>
 				</section>
@@ -172,19 +193,40 @@
 				<section>
 					<h1>Consistency</h1>
 				</section>
-				<section >
+				<section>
 					<img src="images/aggregate-tables.png" class="stretch"/>
 				</section>
-				<section >
+				<section>
+					<h3 class="fragment">Accept order</h3>
+					<h3 class="fragment">Fulfill order</h3>
+					<h3 class="fragment">Bill customer</h3>
+					<h3 class="fragment">Ship package</h3>
+				</section>
+				<section>
+					<h2>Transaction script</h2>
+				</section>
+				<section>
+					<h3 style="line-height: 2.2">Accept order</h3>
+					<h3 style="line-height: 2.2">Fulfill order</h3>
+					<h3 style="line-height: 2.2">Bill customer</h3>
+					<h3 style="line-height: 2.2">Ship package</h3>
+				</section>
+				<section>
+					<h2>Batch jobs</h2>
+				</section>
+				<section>
 					<img src="images/cross-aggregate-logic.png" class="stretch"/>
 				</section>
-				<section >
+				<section>
 					<img src="images/aggregate-chain.png" class="stretch"/>
 				</section>
-				<section >
+				<section>
+					<img src="images/blue-architecture.png" class="stretch"/>
+				</section>
+				<section>
 					<img src="images/table-queue.png" class="stretch"/>
 				</section>
-				<section >
+				<section>
 					<h3>
 					<pre class="stretch"><code class="sql" data-noescape data-trim data-line-numbers="2|6|4|5|7">
 with msg as (
@@ -197,7 +239,7 @@ with msg as (
 					</code></pre>
 					</h3>
 				</section>
-				<section >
+				<section>
 					<h3>
 					<pre class="stretch"><code class="csharp" data-noescape data-trim data-line-numbers="1|2|4-5|7|8|9-10">
 public class ConfirmOrderHandler 
@@ -246,23 +288,31 @@ commit tran
 					</div>
 				</section>
 				<section>
+					<h3 class="fragment">We don't know</h3>
+					<h3 class="fragment">It's not us</h3>
+					<h3 class="fragment">Go away!</h3>
+					<h3 class="fragment">Cosmic ray bit flip?</h3>
+					<h3 class="fragment">OK, we will look into it...</h3>
+				</section>
+				<section style="text-align: left">
 					<h3 class="fragment"><code>Receiving message 123</code><span class="fragment">✔️</span></h3>
 					<h3 class="fragment"><code>Processing message 123</code><span class="fragment">✔️</span></h3>
 					<h3 class="fragment"><code>Acknowledging message 123</code><span class="fragment">✔️</span></h3>
 				</section>
-				<section>
+				<section style="text-align: left">
 					<h3 class="fragment"><code>Receiving message 234</code><span class="fragment">✔️</span></h3>
 					<h3 class="fragment"><code>Processing message 234</code><span class="fragment">✔️</span></h3>
 					<h3 class="fragment"><code>Acknowledging message 234</code><span class="fragment">🔥</span></h3>
 				</section>
-				<section>
+				<section style="text-align: left">
 					<h3 class="fragment"><code>Receiving message 234</code><span class="fragment">✔️</span></h3>
 					<h3 class="fragment"><code>Processing message 234</code><span class="fragment">✔️</span></h3>
 					<h3 class="fragment"><code>Acknowledging message 234</code><span class="fragment">️️️️✔️</span></h3>
 				</section>
-				<section>
-					<h3><code>Processing message 234</code></h3>
-					<h3><code>Processing message 234</code></h3>
+				<section style="text-align: left">
+					<h3><code>Processing message 234</code>️️✔️</h3>
+					<h3><code>...</code></h3>
+					<h3><code>Processing message 234</code>✔️</h3>
 				</section>
 				<section>
 					<blockquotestyle="width: 100%;">
@@ -305,6 +355,9 @@ commit tran
 					<img src="images/create-shipment-flow.png" class="stretch"/>
 				</section>
 				<section>
+					<img src="images/create-shipment-flow-2.png" class="stretch"/>
+				</section>
+				<!-- <section>
 					<img src="" class="demo" data-img-prefix="images/Demo-Aggregates/frame" data-suffix=".png">
 					<div>
 						<span class="fragment imgsrc" data-index="1" data-transform="zoom-left-top"></span>
@@ -335,7 +388,7 @@ commit tran
 						<span class="fragment imgsrc" data-index="21" data-transform="zoom-right-centre-top"></span>
 						<span class="fragment imgsrc" data-index="22" data-transform="zoom-right-centre-top"></span>
 					</div>
-				</section>
+				</section> -->
 				<section>
 					<img src="images/manager.gif" width="30%" style="float: right"/>
 					<div style="width: 60%;">
@@ -344,38 +397,46 @@ commit tran
 						</h3>					
 					</div>
 				</section>
-				<section >
+				<section>
 					<img src="images/distributed-stores.png"/>
 				</section>
 				<section>
 					<h1>Sprint One</h1>
 				</section>
-				<section >
+				<section>
 					<img src="images/blue-door.png" class="stretch"/>
+				</section>
+				<section >
+					<img src="images/distributed-stores.png"/>
 				</section>
 				<section>
 					<img src="images/multiple-databases.png" class="stretch"/>
 				</section>
 				<section>
+					<img src="images/create-shipment-flow-2.png" class="stretch"/>
+				</section>
+				<section>
 					<img src="images/store-and-publish.png"/>
 				</section>
 				<section>
-					<h2>Two-phase commit</h1>
-					<h3 class="fragment">Prepare A<span class="fragment">✔️</span></h3>
-					<h3 class="fragment">Prepare B<span class="fragment">✔️</span></h3>
-					<h3 class="fragment">Commit A<span class="fragment">✔️</span></h3>
-					<h3 class="fragment">Commit B<span class="fragment">✔️</span></h3>
+					<h2>Two-Phase Commit</h1>
+					<div>
+						<h3 class="fragment">Prepare A<span class="fragment">✔️</span></h3>
+						<h3 class="fragment">Prepare B<span class="fragment">✔️</span></h3>
+						<h3 class="fragment">Commit A<span class="fragment">✔️</span></h3>
+						<h3 class="fragment">Commit B<span class="fragment">✔️</span></h3>
+					</div>
 				</section>
 				<section>
 					<h3 class="fragment">Prepare A<span class="fragment">✔️</span></h3>
 					<h3 class="fragment">Prepare B<span class="fragment">🔥</span></span></h3>
-					<h3 class="fragment">Rollback A<span class="fragment">✔️</span></h3>
+					<h3 class="fragment">Rollback A<span class="fragment">↩️</span></h3>
 				</section>
 				<section>
 					<h3 class="fragment">Prepare A<span class="fragment">✔️</span></h3>
 					<h3 class="fragment">Prepare B<span class="fragment">️️️✔️</span></span></h3>
 					<h3 class="fragment">Commit A<span class="fragment">✔️</span></h3>
-					<h3 class="fragment">Commit B<span class="fragment">🔥</span><span class="fragment">🔥</span><span class="fragment">✔️</span></h3>
+					<h3 class="fragment">Commit B<span class="fragment">🔥</span><span class="fragment">🔥</span><span class="fragment">️️️️✔️</span></h3>
 				</section>
 				<section >
 					<img src="images/dtc.png" class="stretch"/>
@@ -386,7 +447,11 @@ commit tran
 				<section >
 					<h1>\(f(f(x)) = f(x)\)</h1>
 				</section>
-				<section >
+				<section>
+					<h2>Persist state</h2>
+					<h2>Publish event</h2>
+				</section>
+				<section>
 					<img src="" class="demo" data-img-prefix="images/Demo0-Ruskie/frame">
 					<div>
 						<span class="fragment imgsrc" data-index="1" data-transform="zoom-left-top"></span>
@@ -403,7 +468,11 @@ commit tran
 						<span class="fragment imgsrc" data-index="11" data-transform="zoom-left-centre"></span>
 					</div>
 				</section>
-				<section >
+				<section>
+					<h2>Publish event</h2>
+					<h2>Persist state</h2>
+				</section>
+				<section>
 					<img src="" class="demo" data-img-prefix="images/Demo1-SwissCheese/frame">
 					<div>
 						<span class="fragment imgsrc" data-index="1" data-transform="zoom-left-top"></span>
@@ -420,6 +489,7 @@ commit tran
 				<section >
 					<img src="images/publish-persist.png" class="stretch"/>
 				</section>
+				<!--
 				<section>
 					<h2>Framing the problem</h2>
 					<img src="images/what-do-we-want.png" width="30%" style="float: right"/>
@@ -429,17 +499,11 @@ commit tran
 						<li class="fragment"><h3>Don't leak non-durable state 👻</h3></li>
 					</ul>
 				</section>
-				<section>
-					<blockquote cite="https://exactly-once.github.io/posts/consistent-messaging/" style="width: 100%;">
-<h3>
-	"... we want an endpoint to produce observable side-effects equivalent to some execution in which each logical message gets processed exactly-once" 
-</h3>
-	-- Tomasz Masternak				
-</blockquote>
-
-				</section>
 				<section >
 					<img src="images/publish-persist-2.png" class="stretch"/>
+				</section>
+				<section>
+					<img src="images/item-id-binding.png"/>
 				</section>
 				<section>
 					<h1>Demo</h1>
@@ -467,7 +531,19 @@ commit tran
 						<span class="fragment imgsrc" data-index="16" data-transform="zoom-left-bottom"></span>
 					</div>
 				</section>
-				<section >
+				<section>
+					<blockquote cite="https://exactly-once.github.io/posts/consistent-messaging/" style="width: 100%;">
+						<h3>
+							"... we want an endpoint to produce observable side-effects equivalent to some execution in which each logical message gets processed exactly-once" 
+						</h3>
+							-- Tomasz Masternak				
+					</blockquote>
+				</section>
+				-->
+				<section>
+					<img src="images/deadlock.png" class="stretch"/>
+				</section>
+				<!-- <section >
 					<img src="" class="demo" data-img-prefix="images/Demo-Deadlocks/frame" data-suffix=".png">
 					<div>
 						<span class="fragment imgsrc" data-index="1" data-transform="zoom-left-top"></span>
@@ -480,29 +556,31 @@ commit tran
 						<span class="fragment imgsrc" data-index="6" data-transform="zoom-left-bottom"></span>
 						<span class="fragment imgsrc" data-index="7" data-transform="zoom-left-bottom"></span>
 					</div>
-				</section>
+				</section> -->
 				<section >
 					<img src="images/dtc-latency.png" class="stretch"/>
+				</section>
+				<section >
+					<img src="images/dtc-latency-shipment.png" class="stretch"/>
 				</section>
 				<section>
 					<img src="images/manager.gif" width="30%" style="float: right"/>
 					<div style="width: 60%;">
-						<h2>Frustration</h2>
-							Why can't we have both correctness and performance?
+						<h2>Why can't we have both correctness and performance?</h2>
 					</div>
 				</section>
-				<section>
+				<!-- <section data-background="#4c0b0b">
 					<h3>meets the performance objectives 👌</h3>
 					<h3 class="fragment">struggles to deliver a correct solution 🔥</h3> 
 					<h3 class="fragment">entangles business logic with message delivery logic 🔥</h3>
 					<h3 class="fragment">assumes all components live in a hostile environment 🔥</h3>
 				</section>
-				<section >
+				<section data-background="#0b264c">
 					<h3>delivers a correct solution 👌</h3>
 					<h3 class="fragment">struggles with performance 🔥</h3>
 					<h3 class="fragment">used protocols do not tolerate failures or latency 🔥</h3>
 					<h3 class="fragment">assumes non-hostile and non-distributed environment 🔥</h3>
-				</section>
+				</section> -->
 				<section>
 					<h1>Collaborate</h1>
 				</section>
@@ -510,13 +588,7 @@ commit tran
 					<img src="images/consensus.png" class="stretch"/>
 				</section>
 				<section>
-					<img src="images/consensus-issue.png" class="stretch"/>
-				</section>
-				<section>
 					<img src="images/dedup.png" class="stretch"/>
-				</section>
-				<section>
-					<img src="images/dedup-issue.png" class="stretch"/>
 				</section>
 				<section>
 					<img src="images/outbox.png" class="stretch"/>
@@ -524,40 +596,41 @@ commit tran
 				<section>
 					<h1>Outbox</h1>
 				</section>
-				<section>
-					<img src="images/picoservices.png" class="stretch"/>
-				</section>
-				<section>
+				<section data-transition="slide-in none-out">
 					<img src="images/forwarding-1.png" class="stretch"/>
 				</section>
-				<section>
+				<section data-transition="none-in slide-out">
 					<img src="images/forwarding-2.png" class="stretch"/>
 				</section>
 				<section>
+					<img src="images/picoservices.png" class="stretch"/>
+				</section>
+				<section data-transition="slide-in none-out">
 					<img src="images/forwarding-3.png" class="stretch"/>
 				</section>
-				<section>
+				<section data-transition="none">
 					<img src="images/forwarding-4.png" class="stretch"/>
 				</section>
-				<section>
+				<section data-transition="none">
 					<img src="images/forwarding-5.png" class="stretch"/>
 				</section>
-				<section>
+				<section data-transition="none">
 					<img src="images/forwarding-6.png" class="stretch"/>
 				</section>
 				<section>
 					<img src="images/polyglot-messaging.png" class="stretch"/>
 				</section>
 				<section>
-					<h3>2003: polyglot programming</h3>
-					<h3 class="fragment">2011: polyglot persistence</h3>
-					<h2 class="fragment">2019: polyglot messaging</h2>
+					<h3>2003: Polyglot programming</h3>
+					<h3 class="fragment">2011: Polyglot persistence</h3>
+					<h2 class="fragment">2019: Polyglot messaging</h2>
 				</section>
 				<section>
+					<img src="images/final-architecture.png" class="stretch"/>
+				</section>
+				<section>
+					<h3>exactly-once.github.io</h3>
 					<img src="images/blog.png" class="stretch"/>
-				</section>
-				<section>
-					<img src="images/micro-cph.png" class="stretch"/>
 				</section>
 				<section>
 					<h1>Thank you!</h1>
@@ -602,7 +675,7 @@ commit tran
 			// Full list of configuration options available at:
 			// https://github.com/hakimel/reveal.js#configuration
 			Reveal.initialize({
-				controls: true,
+				controls: false,
 				progress: true,
 				history: true,
 				center: true,
